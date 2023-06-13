@@ -11,9 +11,9 @@ class Graph():
  
     def is_bipartite_util_bfs(self, src):
  
-        # Create a color array to store colors
+        # Create a color lst to store colors
         # assigned to all vertices. Vertex
-        # number is used as index in this array.
+        # number is used as index in this lst.
         # The value '-1' of self.colorArr[i] is used
         # to indicate that no color is assigned to
         # vertex 'i'. The value 1 is used to indicate
@@ -73,16 +73,15 @@ class Graph():
     def color_graph(self, color, pos, c):
         if color[pos] != -1 and color[pos] != c:
             return False
-            
-        # color this pos as c and all its neighbours and 1-c
+        
         color[pos] = c
         ans = True
         for i in range(0, self.V):
             if self.graph[pos][i]:
                 if color[i] == -1:
-                    ans &= self.color_graph(color, i, 1-c)
+                    ans &= self.color_graph(color, i, 1 - c)
                     
-                if color[i] !=-1 and color[i] != 1-c:
+                if color[i] != -1 and color[i] != 1 - c:
                     return False
             
             if not ans:
