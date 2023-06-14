@@ -94,4 +94,9 @@ class Graph():
         #start is vertex 0
         pos = 0
         # two colors 1 and 0
-        return self.color_graph(color, pos, 1)
+        for pos in range(self.V):
+            if color[pos] == -1:
+                result = self.color_graph(color, pos, 1)
+                if not result:
+                    return False
+        return True
