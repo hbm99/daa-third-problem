@@ -6,6 +6,7 @@ class Graph():
         self.graph = [[0 for column in range(vertices)]
                         for row in range(vertices)]
         self.colorArr = [-1 for i in range(self.V)]
+        self.distances = [{v: [] for v in range(self.V)} for _ in range(self.V)]
 
     # BFS
  
@@ -100,3 +101,20 @@ class Graph():
                 if not result:
                     return False
         return True
+
+
+    def no_weighted_floyd_warshall(self):
+        for i in range(self.V):
+            for j in range(self.V):
+                if self.graph[i][j] != 0:
+                    self.distances[i][j].append(self.graph[i][j])
+
+        for k in range(self.V):
+            for i in range(self.V):
+                for j in range(self.V):
+                    if i != j and i != k and j != k:
+                        if self.graph[i][k] != 0 and self.graph[k][j] != 0:
+                            dist = self.graph[i][k] + self.graph[k][j]
+                            if dist not in self.distances[i][j]:
+                                self.distances[i][j].append(dist)
+        return self.distances
