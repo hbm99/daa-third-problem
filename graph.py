@@ -5,10 +5,6 @@ class Graph():
         self.V = vertices
         self.graph = graph or  [[0 for column in range(vertices)] for row in range(vertices)]
         self.colorArr = [-1 for i in range(self.V)]
-        self.distances = {v: [[] for _ in range(self.V)]  for v in range(self.V)}
-        for i in range(self.V):
-            for j in range(self.V):
-                self.distances[i][j].append(0)
 
     # BFS
  
@@ -70,32 +66,6 @@ class Graph():
                 if not self.is_bipartite_util_bfs(i):
                     return False
         return True
-
-    def bfs_tree(self, s):
-        visited = [False] * self.V
-        parent = [-1] * self.V
-        level = [-1] * self.V
-        queue = deque()
-
-        visited[s] = True
-        level[s] = 0
-        queue.append(s)
-
-        while queue:
-            u = queue.popleft()
-            for v in range(len(self.graph[u])):
-                if self.graph[u][v] == 1 and not visited[v]:
-                    visited[v] = True
-                    parent[v] = u
-                    level[v] = level[u] + 1
-                    queue.append(v)
-        
-        bfs_tree = {}
-        for i in range(self.V):
-            if parent[i] != -1:
-                bfs_tree[i] = parent[i]
-
-        return bfs_tree
     
     # DFS
 
@@ -130,29 +100,5 @@ class Graph():
                     return False
         return True
 
-    #############################
-
-    def unweighted_floyd_warshall(self):
-        for i in range(self.V):
-            for j in range(self.V):
-                if self.graph[i][j] != 0:
-                    self.distances[i][j].append(self.graph[i][j])
-                    self.distances[i][j].remove(0)
-
-        for k in range(self.V):
-            for i in range(self.V):
-                for j in range(self.V):
-                    if i != j: #and i != k and j != k:
-                        if self.distances[i][k][0] != 0 and self.distances[k][j][0] != 0:
-                            
-                            for distance1 in self.distances[i][k]:
-                                for distance2 in self.distances[k][j]:
-                                    dist = distance1 + distance2
-                                    self.distances[i][j].append(dist)
-                                    if 0 in self.distances[i][j]:
-                                        self.distances[i][j].remove(0)
-
-        return self.distances
     
-
     
