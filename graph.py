@@ -1,12 +1,11 @@
-
+from collections import deque
 class Graph():
         
-    def __init__(self, vertices):
+    def __init__(self, vertices, graph = None):
         self.V = vertices
-        self.graph = [[0 for column in range(vertices)]
-                        for row in range(vertices)]
+        self.graph = graph or  [[0 for column in range(vertices)] for row in range(vertices)]
         self.colorArr = [-1 for i in range(self.V)]
-        self.distances = [{v: [] for v in range(self.V)} for _ in range(self.V)]
+        self.distances = {v: [0] * self.V for v in range(self.V)}
 
     # BFS
  
@@ -69,6 +68,32 @@ class Graph():
                     return False
         return True
 
+    def bfs_tree(self, s):
+        visited = [False] * self.V
+        parent = [-1] * self.V
+        level = [-1] * self.V
+        queue = deque()
+
+        visited[s] = True
+        level[s] = 0
+        queue.append(s)
+
+        while queue:
+            u = queue.popleft()
+            for v in range(len(self.graph[u])):
+                if self.graph[u][v] == 1 and not visited[v]:
+                    visited[v] = True
+                    parent[v] = u
+                    level[v] = level[u] + 1
+                    queue.append(v)
+
+        bfs_tree = {}
+        for i in range(self.V):
+            if parent[i] != -1:
+                bfs_tree[i] = parent[i]
+
+        return bfs_tree
+    
     # DFS
 
     def color_graph(self, color, pos, c):
@@ -102,19 +127,24 @@ class Graph():
                     return False
         return True
 
+    #############################
 
-    def no_weighted_floyd_warshall(self):
+    def unweighted_floyd_warshall(self):
         for i in range(self.V):
             for j in range(self.V):
                 if self.graph[i][j] != 0:
-                    self.distances[i][j].append(self.graph[i][j])
+                    self.distances[i][j] = self.graph[i][j]
 
         for k in range(self.V):
             for i in range(self.V):
                 for j in range(self.V):
                     if i != j and i != k and j != k:
-                        if self.graph[i][k] != 0 and self.graph[k][j] != 0:
-                            dist = self.graph[i][k] + self.graph[k][j]
-                            if dist not in self.distances[i][j]:
-                                self.distances[i][j].append(dist)
+                        if self.distances[i][k] != 0 and self.distances[k][j] != 0:
+                            dist = self.distances[i][k] + self.distances[k][j]
+                            if self.distances[i][j] == 0:
+                                self.distances[i][j] = dist
+
         return self.distances
+    
+
+    
