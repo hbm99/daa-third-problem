@@ -1,8 +1,12 @@
 import random
 
 class NeighborsGraph:
-    def __init__(self):
-        self.vertices = {}
+    def __init__(self, vertices=None, edges=None):
+        self.vertices = vertices or {}
+        if edges:
+            for edge in edges:
+                self.add_edge(edge[0], edge[1])
+
 
     def add_vertex(self, vertex):
         if vertex not in self.vertices:
@@ -47,13 +51,6 @@ def partition(G):
     B = vertices[len(vertices)//2:]
 
     
-    cut_size = 0
-    for vertex in A:
-        for neighbor in G.vertices[vertex]:
-            if neighbor in B:
-                cut_size += 1
-
-    
     while True:
         
         improved_A = group_improved(G, A, B)
@@ -62,7 +59,15 @@ def partition(G):
         if not (improved_A or improved_B):
             break
 
-    return A, B
+    removed_edges = 0
+    for v in G.vertices.keys():
+        neighbors = G.vertices[v]
+        for w in neighbors:
+            if (v in A and w in A) or (v in B and w in B):
+                removed_edges += 1
+
+
+    return A, B, removed_edges
 
 if __name__ == '__main__':
 
@@ -78,7 +83,7 @@ if __name__ == '__main__':
     G.add_edge(1, 4)
     G.add_edge(1, 5)
 
-    groups = partition(G)
-    print(groups)
+    groups_edges_count = partition(G)
+    print(groups_edges_count)
 
     

@@ -31,3 +31,9 @@ def backtrack_solution(g, k):
     else:
         is_bipartite = remove_k_edges(edges, k)
     return is_bipartite
+
+def find_min_k(g):
+    k = 0
+    while not backtrack_solution(g, k):
+        k += 1
+    return k

@@ -5,7 +5,18 @@ class Graph():
         self.V = vertices
         self.graph = graph or  [[0 for column in range(vertices)] for row in range(vertices)]
         self.colorArr = [-1 for i in range(self.V)]
-
+    
+    @classmethod
+    def from_edges(cls, edges):
+        if edges:
+            V = max(max(e) for e in edges) + 1
+        else :
+            V = 0
+        g = cls(V)
+        for u, v in edges:
+            g.graph[u][v] = 1
+        return g
+    
     # BFS
  
     def is_bipartite_util_bfs(self, src):
